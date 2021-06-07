@@ -50,12 +50,12 @@ async function run() {
   const existingReq = await sheets.spreadsheets.values.get(readExistingOptions);
   existing = existingReq.data.values;
   if (existing) {
-    existing = existing.flat();
+    existing = [].concat(...existing);
   }
 
   // Add each url
   if (res && res.length > 0) {
-    urls = res.flat();
+    urls = [].concat(...res);
     for (const url of urls) {
       if (existing.includes(url)) continue;
 
