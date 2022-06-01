@@ -1,5 +1,6 @@
 const { RightMoveScraper } = require('./scraper/RightMoveScraper');
 const { PrimeLocationScraper } = require('./scraper/PrimeLocationScraper');
+const { ZooplaScraper } = require('./scraper/ZooplaScraper');
 
 async function scrape(url) {
   let scraper;
@@ -7,6 +8,8 @@ async function scrape(url) {
     scraper = new RightMoveScraper()
   } else if (url.includes('primelocation')) {
     scraper = new PrimeLocationScraper()
+  } else if (url.includes('zoopla')) {
+    scraper = new ZooplaScraper()
   }
   return scraper.scrape(url);
 }
