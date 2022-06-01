@@ -21,8 +21,14 @@ async function scrape(url) {
     await driver.get(url);
     const rent = await getRent(driver);
     const travel = await getTravelInfo(driver);
+    const baths = await getBaths(driver);
+    const furnished = await getFurnished(driver);
+    const date = await getAvailableFrom(driver)
 
     travel.unshift(rent)
+    travel.push(furnished);
+    travel.push(baths)
+    travel.push(date);
     travel.push(url);
     return travel;
   } finally {
@@ -35,6 +41,24 @@ async function getRent(driver) {
   const rentSpan = await rentDiv.findElement(By.xpath('span'));
   const text = await rentSpan.getText();
   return text.replace(/\D/g, '');
+}
+
+async function getBaths(driver) {
+  const div = driver.wait(until.elementLocated(By.xpath('//div[@class="tmJOVKTrHAB4bLpcMjzQ" and text()="BATHROOMS"]/../..//div[@class="_1fcftXUEbWfJOJzIUeIHKt"]')));
+  const text = await div.getText();
+  return text.replace(/\D/g, '');
+}
+
+async function getFurnished(driver) {
+  return await _getLettingDetails(driver, 'Furnish type: ')
+}
+
+async function getAvailableFrom(driver) {
+  try {
+    return await _getLettingDetails(driver, 'Let available date: ')
+  } catch (e) {
+    return "N/A"
+  }
 }
 
 async function getTravelInfo(driver) {
@@ -62,6 +86,12 @@ async function getRouteInfo(wp1, wp2) {
   const distance = obj.travelDistance;
   const time = obj.travelDuration;
   return [distance, time / 60];
+}
+
+async function _getLettingDetails(driver, selectionText) {
+  const div = driver.wait(until.elementLocated(By.xpath(`//dt[text()="${selectionText}"]/../dd`)), 5000);
+  const text = await div.getText();
+  return text;
 }
 
 exports.scrape = scrape;

@@ -10,7 +10,7 @@ const client = new google.auth.JWT(
   keys.private_key,
   ['https://www.googleapis.com/auth/spreadsheets']
 );
-SHEET_ID = '1agYULqXgb_bO3NHd0SpY-m6n1rXXKNChAC1crUJ4l4I'
+SHEET_ID = '1nmA2_P84Xe8yHHS5sua1lPDBb8AeLFM9q1XaCS0JWaw'
 
 client.authorize((err, token) => {
   if (err) return console.log('Error authorising: ', err);
@@ -26,7 +26,7 @@ const readNewOptions = {
 
 const readExistingOptions = {
   spreadsheetId: SHEET_ID,
-  range: 'Data!F1:F1000',
+  range: 'Data!I1:I1000',
 };
 
 const writeOptions = {
@@ -73,6 +73,8 @@ async function append(row) {
   const res = await sheets.spreadsheets.values.append(writeOptions);
 }
 
-setInterval(() => {
-  run();
-}, REFRESH_RATE);
+// setInterval(() => {
+//   run();
+// }, REFRESH_RATE);
+
+run()
