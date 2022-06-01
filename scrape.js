@@ -1,12 +1,14 @@
-const scrapeRightMove = require('./scrapeRightMove');
-const scrapePrime = require('./scrapePrime');
+const { RightMoveScraper } = require('./scraper/RightMoveScraper');
+const { PrimeLocationScraper } = require('./scraper/PrimeLocationScraper');
 
 async function scrape(url) {
+  let scraper;
   if (url.includes('rightmove')) {
-    return scrapeRightMove.scrape(url);
+    scraper = new RightMoveScraper()
   } else if (url.includes('primelocation')) {
-    return scrapePrime.scrape(url);
+    scraper = new PrimeLocationScraper()
   }
+  return scraper.scrape(url);
 }
 
 exports.scrape = scrape;
